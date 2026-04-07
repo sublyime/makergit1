@@ -30,7 +30,7 @@ async def register(user: UserCreate, request: Request):
             password_hash,
             api_key,
         )
-        # Convert UUID to string
+        
         row_dict = dict(row)
         row_dict['id'] = str(row_dict['id'])
         return RegisterResponse(**row_dict)
