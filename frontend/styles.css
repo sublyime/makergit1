@@ -1,0 +1,521 @@
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: #f4f5f7;
+  color: #111827;
+}
+
+main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+header {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+header h1 {
+  margin: 0 0 12px;
+  font-size: 2.5rem;
+}
+
+#auth-section {
+  text-align: right;
+}
+
+#auth-section input {
+  display: block;
+  margin: 8px 0;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  width: 200px;
+}
+
+#auth-section button {
+  margin: 4px;
+  padding: 8px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#auth-section button:hover {
+  background: #2563eb;
+}
+
+#create-project {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+}
+
+#create-project input,
+#create-project textarea {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+#create-project textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+#create-project button {
+  margin-top: 12px;
+  padding: 12px 24px;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#create-project button:hover {
+  background: #059669;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+}
+
+.tags span {
+  display: inline-block;
+  margin-right: 8px;
+  margin-top: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.85rem;
+}
+
+.error {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+.success {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+/* Tab Navigation */
+#tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.tab-button {
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: 16px;
+  color: #6b7280;
+  transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+  color: #111827;
+}
+
+.tab-button.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Device Management Section */
+#devices-section {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+}
+
+#device-registration,
+#firmware-upload {
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+#device-registration h3,
+#firmware-upload h3,
+#devices-list h3,
+#firmware-list h3 {
+  margin-top: 0;
+  color: #111827;
+}
+
+#device-registration input,
+#firmware-upload input,
+#firmware-upload textarea {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+#firmware-upload textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+#device-registration button,
+#firmware-upload button {
+  margin-top: 12px;
+  padding: 12px 24px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#device-registration button:hover,
+#firmware-upload button:hover {
+  background: #2563eb;
+}
+
+#firmware-upload input[type="checkbox"] {
+  width: auto;
+  margin: 8px;
+  cursor: pointer;
+}
+
+/* Device Cards */
+.device-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.device-card h4 {
+  margin: 0 0 12px;
+  color: #111827;
+}
+
+.device-card p {
+  margin: 8px 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.device-card strong {
+  color: #111827;
+}
+
+.status-online {
+  color: #10b981;
+  font-weight: bold;
+}
+
+.status-offline {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: #f59e0b;
+  font-weight: bold;
+}
+
+.device-card button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.device-card button:hover {
+  background: #dc2626;
+}
+
+/* Firmware Cards */
+.firmware-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.firmware-card h4 {
+  margin: 0 0 12px;
+  color: #111827;
+}
+
+.firmware-card p {
+  margin: 8px 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.firmware-card code {
+  background: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+
+.badge-stable {
+  display: inline-block;
+  background: #10b981;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  margin-left: 8px;
+}
+
+#devices-container,
+#firmware-container {
+  margin-top: 16px;
+}
+
+#devices-container p,
+#firmware-container p {
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* ===== BOM STYLES ===== */
+
+#boms-section {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+}
+
+#bom-creation,
+#add-item-section,
+#bom-search-library {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+#bom-creation input,
+#bom-creation textarea,
+#bom-creation select,
+#add-item-section input,
+#add-item-section textarea,
+#bom-search-library input {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+#bom-creation textarea,
+#add-item-section textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+#bom-creation button,
+#add-item-section button,
+#bom-search-library button,
+#bom-editor button {
+  margin-top: 12px;
+  padding: 12px 24px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#bom-creation button:hover,
+#add-item-section button:hover,
+#bom-search-library button:hover,
+#bom-editor button:hover {
+  background: #2563eb;
+}
+
+/* BOM Cards */
+.bom-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.bom-card h4 {
+  margin: 0 0 12px;
+  color: #111827;
+}
+
+.bom-card p {
+  margin: 8px 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.bom-card button {
+  display: inline-block;
+  margin-right: 8px;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.bom-card button:hover {
+  background: #2563eb;
+}
+
+/* BOM Item Cards */
+.bom-item-card {
+  background: white;
+  border-left: 4px solid #3b82f6;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-header {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+}
+
+.item-ref {
+  font-weight: bold;
+  color: #111827;
+  min-width: 60px;
+}
+
+.item-qty {
+  color: #6b7280;
+  font-size: 0.9rem;
+  min-width: 80px;
+}
+
+.item-price {
+  color: #10b981;
+  font-weight: bold;
+  min-width: 80px;
+}
+
+.bom-item-card > div:last-child {
+  display: flex;
+  gap: 8px;
+}
+
+.bom-item-card button {
+  padding: 6px 12px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.bom-item-card button:hover {
+  background: #dc2626;
+}
+
+#bom-info {
+  background: #f0fdf4;
+  border-left: 4px solid #10b981;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+#bom-info p {
+  margin: 6px 0;
+  color: #15803d;
+}
+
+/* Component Library Results */
+.library-component-card {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.library-component-card h5 {
+  margin: 0 0 8px;
+  color: #111827;
+}
+
+.library-component-card p {
+  margin: 4px 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.library-component-card a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.library-component-card a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,5 @@
+fastapi
+uvicorn[standard]
+asyncpg
+pydantic[email]
+passlib[argon2]

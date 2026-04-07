@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MakerGit</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <h1>MakerGit</h1>
+      <p>A maker-first collaboration hub for IoT, edge, and homelab projects.</p>
+      <div id="auth-section">
+        <div id="login-form" style="display: none;">
+          <h3>Login</h3>
+          <input type="text" id="login-username" placeholder="Username or Email" />
+          <input type="password" id="login-password" placeholder="Password" />
+          <button onclick="login()">Login</button>
+          <button onclick="showRegister()">Register</button>
+        </div>
+        <div id="register-form" style="display: none;">
+          <h3>Register</h3>
+          <input type="text" id="register-username" placeholder="Username" />
+          <input type="email" id="register-email" placeholder="Email" />
+          <input type="text" id="register-display-name" placeholder="Display Name" />
+          <input type="password" id="register-password" placeholder="Password" />
+          <button onclick="register()">Register</button>
+          <button onclick="showLogin()">Back to Login</button>
+        </div>
+        <div id="user-info" style="display: none;">
+          <span id="user-display"></span>
+          <button onclick="logout()">Logout</button>
+        </div>
+        <button id="auth-button" onclick="showLogin()">Login</button>
+      </div>
+    </header>
+
+    <section id="create-project" style="display: none;">
+      <h2>Create New Project</h2>
+      <input type="text" id="project-title" placeholder="Project Title" />
+      <textarea id="project-summary" placeholder="Project Summary"></textarea>
+      <textarea id="project-description" placeholder="Project Description"></textarea>
+      <input type="text" id="project-tags" placeholder="Tags (comma separated)" />
+      <button onclick="createProject()">Create Project</button>
+    </section>
+
+    <!-- Tabs for Projects and Devices -->
+    <div id="tabs" style="display: none;">
+      <button class="tab-button active" onclick="switchTab('projects')">My Projects</button>
+      <button class="tab-button" onclick="switchTab('devices')">My Devices</button>
+      <button class="tab-button" onclick="switchTab('boms')">Bill of Materials</button>
+    </div>
+
+    <!-- Projects Tab -->
+    <section id="project-list" class="tab-content active">
+      <h2>Featured Projects</h2>
+      <div class="card">Loading projects...</div>
+    </section>
+
+    <!-- Devices Tab -->
+    <section id="devices-section" class="tab-content" style="display: none;">
+      <h2>Device Management</h2>
+      
+      <div id="device-registration">
+        <h3>Register New Device</h3>
+        <input type="hidden" id="device-project-id" />
+        <input type="text" id="device-name" placeholder="Device Name (e.g., ESP32-Kitchen)" />
+        <input type="text" id="device-type" placeholder="Device Type (e.g., ESP32)" />
+        <input type="text" id="device-unique-id" placeholder="Unique ID / MAC Address" />
+        <button onclick="registerDevice()">Register Device</button>
+      </div>
+
+      <div id="devices-list">
+        <h3>Connected Devices</h3>
+        <div id="devices-container">
+          <p>No devices registered yet</p>
+        </div>
+      </div>
+
+      <div id="firmware-upload">
+        <h3>Upload Firmware</h3>
+        <input type="hidden" id="firmware-project-id" />
+        <input type="text" id="firmware-version" placeholder="Version (e.g., 1.0.0)" />
+        <textarea id="firmware-release-notes" placeholder="Release Notes"></textarea>
+        <input type="text" id="firmware-binary-url" placeholder="Binary URL (S3, GitHub, etc.)" />
+        <input type="checkbox" id="firmware-is-stable" /> Mark as Stable
+        <button onclick="uploadFirmware()">Upload Firmware Version</button>
+      </div>
+
+      <div id="firmware-list">
+        <h3>Available Firmware Versions</h3>
+        <div id="firmware-container">
+          <p>No firmware uploaded yet</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOM (Bill of Materials) Tab -->
+    <section id="boms-section" class="tab-content" style="display: none;">
+      <h2>Bill of Materials Manager</h2>
+      
+      <div id="bom-creation">
+        <h3>Create New BOM</h3>
+        <input type="hidden" id="bom-project-id" />
+        <input type="text" id="bom-name" placeholder="BOM Name (e.g., v2.0 Prototype)" />
+        <input type="text" id="bom-version" placeholder="Version (e.g., 1.0.0)" />
+        <textarea id="bom-description" placeholder="Description"></textarea>
+        <select id="bom-device-id">
+          <option value="">Select Device (optional)</option>
+        </select>
+        <button onclick="createBOM()">Create BOM</button>
+      </div>
+
+      <div id="bom-list">
+        <h3>Project BOMs</h3>
+        <div id="boms-container">
+          <p>No BOMs created yet</p>
+        </div>
+      </div>
+
+      <div id="bom-editor" style="display: none;">
+        <h3 id="bom-editor-title">Edit BOM</h3>
+        
+        <div id="bom-info">
+          <p><strong>Version:</strong> <span id="bom-info-version"></span></p>
+          <p><strong>Total Cost:</strong> $<span id="bom-total-cost">0.00</span></p>
+          <p><strong>Items:</strong> <span id="bom-item-count">0</span></p>
+        </div>
+
+        <div id="add-item-section">
+          <h4>Add Component</h4>
+          <input type="text" id="item-reference" placeholder="Reference (e.g., R1, C2)" />
+          <input type="text" id="item-description" placeholder="Description" />
+          <input type="number" id="item-quantity" placeholder="Quantity" value="1" />
+          <input type="text" id="item-part-number" placeholder="Part Number" />
+          <input type="text" id="item-manufacturer" placeholder="Manufacturer" />
+          <input type="number" id="item-unit-price" placeholder="Unit Price" step="0.01" />
+          <input type="text" id="item-supplier" placeholder="Supplier (Digikey, etc.)" />
+          <input type="text" id="item-datasheet-url" placeholder="Datasheet URL" />
+          <textarea id="item-notes" placeholder="Notes"></textarea>
+          <button onclick="addBOMItem()">Add Item</button>
+        </div>
+
+        <div id="bom-items-list">
+          <h4>Components</h4>
+          <div id="items-container">
+            <p>No items added yet</p>
+          </div>
+        </div>
+
+        <div id="bom-search-library">
+          <h4>Component Library</h4>
+          <input type="text" id="library-search-query" placeholder="Search by part number, name, or manufacturer" />
+          <button onclick="searchComponentLibrary()">Search Library</button>
+          <div id="library-search-results"></div>
+        </div>
+
+        <button onclick="closeBOMEditor()">Back to BOMs List</button>
+        <button onclick="forkBOM()">Fork BOM (Create Variant)</button>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
