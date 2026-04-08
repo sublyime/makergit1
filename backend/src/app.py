@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import projects, auth, devices, boms
+from .routers import projects, auth, devices, boms, library
 from .database import connect_db, close_db
 
 app = FastAPI(title="MakerGit API", version="0.1.0")
@@ -23,6 +23,7 @@ app.include_router(auth, prefix="/auth", tags=["auth"])
 app.include_router(projects, prefix="/projects", tags=["projects"])
 app.include_router(devices, prefix="/api/devices", tags=["devices"])
 app.include_router(boms, prefix="/api/boms", tags=["boms"])
+app.include_router(library, prefix="/api/library", tags=["library"])
 
 @app.on_event("startup")
 async def startup_event():

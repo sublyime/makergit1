@@ -274,6 +274,83 @@ class BOMRead(BaseModel):
     class Config:
         from_attributes = True
 
+# ===== LIBRARY SEARCH MODELS =====
+
+# Device Library Models (for autocomplete/search)
+class DeviceLibraryRead(BaseModel):
+    id: str
+    name: str
+    version: str
+    author: Optional[str] = None
+    category: Optional[str] = None
+    architectures: List[str] = []
+    types: List[str] = []
+    description: Optional[str] = None
+    repository: Optional[str] = None
+    website: Optional[str] = None
+    keywords: List[str] = []
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Component Library Autocomplete Model
+class ComponentLibraryAutocomplete(BaseModel):
+    id: str
+    name: str
+    part_number: str
+    category: Optional[str] = None
+    manufacturer: Optional[str] = None
+    description: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+# Device Library Autocomplete Model
+class DeviceLibraryAutocomplete(BaseModel):
+    id: str
+    name: str
+    version: str
+    category: Optional[str] = None
+    description: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+# Device Autocomplete Model
+class DeviceAutocomplete(BaseModel):
+    id: str
+    name: str
+    device_type: str
+    project_id: str
+
+    class Config:
+        from_attributes = True
+
+# Project Autocomplete Model
+class ProjectAutocomplete(BaseModel):
+    id: str
+    title: str
+    slug: str
+    owner_id: str
+
+    class Config:
+        from_attributes = True
+
+# BOM Material Cost Summary
+class BOMMaterialCostSummary(BaseModel):
+    total_component_cost: float
+    estimated_shipping_cost: Optional[float] = None
+    estimated_tax_cost: Optional[float] = None
+    total_estimated_cost: float
+    cost_currency: str = "USD"
+
+# BOM Fork Request Model
+class BOMForkRequest(BaseModel):
+    target_project_id: str
+    new_bom_name: Optional[str] = None
+
 # Component Variant Models
 class ComponentVariantCreate(BaseModel):
     original_item_id: str

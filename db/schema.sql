@@ -152,6 +152,86 @@ CREATE TABLE device_templates (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- Device Library Table (for autocomplete/search)
+CREATE TABLE device_library (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  version text,
+  author text,
+  category text,
+  architectures text[],
+  types text[],
+  description text,
+  repository text,
+  website text,
+  keywords text[],
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- Component Library Table (for autocomplete/search in BOM)
+CREATE TABLE component_library (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  part_number text NOT NULL UNIQUE,
+  category text,
+  manufacturer text,
+  description text,
+  datasheet_url text,
+  pinout_diagram_url text,
+  specifications jsonb,
+  package_type text,
+  keywords text[],
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- Devices Table (for project device management)
+CREATE TABLE devices (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id uuid NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  unique_id text NOT NULL,
+  name text NOT NULL,
+  device_type text NOT NULL,
+  status text NOT NULL DEFAULT 'offline',
+  last_seen timestamptz,
+  ip_address text,
+  mac_address text,
+  firmware_version text,
+  config jsonb,
+  metadata jsonb,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- Bill of Materials Table
+CREATE TABLE boms (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id uuid NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  name text NOT NULL,
+  description text,
+  revision text DEFAULT '1.0',
+  total_cost numeric(12,2),
+  currency text DEFAULT 'USD',
+  created_by uuid NOT NULL REFERENCES users(id) ON DELETE SET NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- BOM Items Table
+CREATE TABLE bom_items (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  bom_id uuid NOT NULL REFERENCES boms(id) ON DELETE CASCADE,
+  component_id uuid REFERENCES component_library(id) ON DELETE SET NULL,
+  reference_designator text,
+  quantity integer NOT NULL DEFAULT 1,
+  unit_cost numeric(10,2),
+  supplier text,
+  supplier_sku text,
+  notes text,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
 CREATE TABLE telemetry_snapshots (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id uuid NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
@@ -168,3 +248,18 @@ CREATE INDEX idx_build_log_entries_project_id ON build_log_entries(project_id);
 CREATE INDEX idx_comments_project_id ON comments(project_id);
 CREATE INDEX idx_project_tags_tag_id ON project_tags(tag_id);
 CREATE INDEX idx_telemetry_snapshots_project_id ON telemetry_snapshots(project_id);
+
+-- Library search indexes
+CREATE INDEX idx_device_library_name ON device_library USING GIN(to_tsvector('english', name));
+CREATE INDEX idx_device_library_category ON device_library(category);
+CREATE INDEX idx_component_library_name ON component_library USING GIN(to_tsvector('english', name));
+CREATE INDEX idx_component_library_part_number ON component_library(part_number);
+CREATE INDEX idx_component_library_category ON component_library(category);
+CREATE INDEX idx_component_library_keywords ON component_library USING GIN(keywords);
+
+-- Device and BOM indexes
+CREATE INDEX idx_devices_project_id ON devices(project_id);
+CREATE INDEX idx_devices_name ON devices(name);
+CREATE INDEX idx_boms_project_id ON boms(project_id);
+CREATE INDEX idx_bom_items_bom_id ON bom_items(bom_id);
+CREATE INDEX idx_bom_items_component_id ON bom_items(component_id);

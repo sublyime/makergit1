@@ -139,14 +139,20 @@ function logout() {
 }
 
 async function loadUser() {
-  if (!apiKey) return;
+  if (!apiKey) {
+    // Initialize library even without login for guest access
+    initializeLibrarySearch();
+    return;
+  }
 
   try {
     currentUser = await apiCall('/auth/me');
     updateUI();
+    initializeLibrarySearch();
   } catch (error) {
     console.error('Failed to load user:', error);
     logout();
+    initializeLibrarySearch();
   }
 }
 
@@ -631,6 +637,141 @@ async function searchComponentLibrary() {
   } catch (error) {
     console.error('Library search failed:', error);
     document.getElementById('library-search-results').innerHTML = '<p>No components found</p>';
+  }
+}
+
+// ===== AUTOCOMPLETE FUNCTIONS =====
+
+// Search device library (boards, microcontrollers)
+async function searchDeviceTypes() {
+  const query = document.getElementById('device-type').value.trim();
+  
+  if (query.length < 1) {
+    document.getElementById('device-types-list').innerHTML = '';
+    return;
+  }
+
+  try {
+    const results = await apiCall(
+      `/api/library/library/devices/search?q=${encodeURIComponent(query)}&limit=10`
+    );
+    
+    const datalist = document.getElementById('device-types-list');
+    datalist.innerHTML = '';
+    
+    results.forEach(device => {
+      const option = document.createElement('option');
+      option.value = `${device.name} (v${device.version})`;
+      option.textContent = `${device.name} - ${device.category || 'General'}`;
+      datalist.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Device search error:', error);
+  }
+}
+
+function onDeviceTypeSelected() {
+  // This can be used to populate additional device info
+  const deviceType = document.getElementById('device-type').value;
+  console.log('Device type selected:', deviceType);
+}
+
+// Search components by name
+async function searchComponentByName() {
+  const query = document.getElementById('item-description').value.trim();
+  
+  if (query.length < 2) {
+    document.getElementById('component-names-list').innerHTML = '';
+    return;
+  }
+
+  try {
+    const results = await apiCall(
+      `/api/library/library/components/search?q=${encodeURIComponent(query)}&limit=10`
+    );
+    
+    const datalist = document.getElementById('component-names-list');
+    datalist.innerHTML = '';
+    
+    results.forEach(component => {
+      const option = document.createElement('option');
+      option.value = component.name;
+      option.textContent = `${component.name} (${component.part_number})`;
+      datalist.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Component search error:', error);
+  }
+}
+
+// Search components by part number
+async function searchComponentByPartNumber() {
+  const query = document.getElementById('item-part-number').value.trim();
+  
+  if (query.length < 1) {
+    document.getElementById('part-numbers-list').innerHTML = '';
+    return;
+  }
+
+  try {
+    const results = await apiCall(
+      `/api/library/library/components/search?q=${encodeURIComponent(query)}&limit=10`
+    );
+    
+    const datalist = document.getElementById('part-numbers-list');
+    datalist.innerHTML = '';
+    
+    results.forEach(component => {
+      const option = document.createElement('option');
+      option.value = component.part_number;
+      option.textContent = `${component.part_number} - ${component.name}`;
+      option.dataset.componentId = component.id;
+      option.dataset.manufacturer = component.manufacturer || '';
+      datalist.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Part number search error:', error);
+  }
+}
+
+// Search components by manufacturer
+async function searchComponentByManufacturer() {
+  const query = document.getElementById('item-manufacturer').value.trim();
+  
+  if (query.length < 2) {
+    document.getElementById('manufacturers-list').innerHTML = '';
+    return;
+  }
+
+  try {
+    const results = await apiCall(
+      `/api/library/library/components/search?q=${encodeURIComponent(query)}&limit=10`
+    );
+    
+    const datalist = document.getElementById('manufacturers-list');
+    datalist.innerHTML = '';
+    
+    // Extract unique manufacturers
+    const manufacturers = [...new Set(results.map(c => c.manufacturer).filter(Boolean))];
+    
+    manufacturers.forEach(manufacturer => {
+      const option = document.createElement('option');
+      option.value = manufacturer;
+      datalist.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Manufacturer search error:', error);
+  }
+}
+
+// Initialize library search when page loads
+async function initializeLibrarySearch() {
+  try {
+    // Get library statistics
+    const stats = await apiCall('/api/library/library/stats');
+    console.log('Library statistics:', stats);
+  } catch (error) {
+    console.error('Failed to load library stats:', error);
   }
 }
 

@@ -75,7 +75,9 @@
         <div class="form-group">
           <input type="hidden" id="device-project-id" />
           <input type="text" id="device-name" placeholder="Device Name (e.g., ESP32-Kitchen)" />
-          <input type="text" id="device-type" placeholder="Device Type (e.g., ESP32)" />
+          <input type="text" id="device-type" placeholder="Device Type (e.g., ESP32)" list="device-types-list" 
+                 onchange="onDeviceTypeSelected()" oninput="searchDeviceTypes()" />
+          <datalist id="device-types-list"></datalist>
           <input type="text" id="device-unique-id" placeholder="Unique ID / MAC Address" />
           <button onclick="registerDevice()" class="btn-primary">Register Device</button>
         </div>
@@ -154,10 +156,16 @@
           <h4>Add Component</h4>
           <div class="form-grid">
             <input type="text" id="item-reference" placeholder="Reference (e.g., R1)" />
-            <input type="text" id="item-description" placeholder="Description" />
+            <input type="text" id="item-description" placeholder="Description" list="component-names-list"
+                   oninput="searchComponentByName()" />
+            <datalist id="component-names-list"></datalist>
             <input type="number" id="item-quantity" placeholder="Quantity" value="1" />
-            <input type="text" id="item-part-number" placeholder="Part Number" />
-            <input type="text" id="item-manufacturer" placeholder="Manufacturer" />
+            <input type="text" id="item-part-number" placeholder="Part Number" list="part-numbers-list"
+                   oninput="searchComponentByPartNumber()" />
+            <datalist id="part-numbers-list"></datalist>
+            <input type="text" id="item-manufacturer" placeholder="Manufacturer" list="manufacturers-list"
+                   oninput="searchComponentByManufacturer()" />
+            <datalist id="manufacturers-list"></datalist>
             <input type="number" id="item-unit-price" placeholder="Unit Price" step="0.01" />
             <input type="text" id="item-supplier" placeholder="Supplier" />
             <input type="text" id="item-datasheet-url" placeholder="Datasheet URL" />

@@ -517,3 +517,40 @@ code {
   box-shadow: none;
   transform: none;
 }
+
+/* Autocomplete & Datalist Styling */
+input[list] {
+  position: relative;
+}
+
+datalist {
+  display: none;
+}
+
+input[list]:focus + datalist {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid var(--border-light);
+  border-top: none;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+datalist option {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: block;
+}
+
+datalist option:hover,
+datalist option:checked {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
